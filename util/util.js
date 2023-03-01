@@ -1,5 +1,6 @@
 import fs from "fs";
 import Jimp from "jimp";
+import fetch from "node-fetch";
 
 
 // filterImageFromURL
@@ -12,7 +13,10 @@ import Jimp from "jimp";
  export async function filterImageFromURL(inputURL) {
   return new Promise(async (resolve, reject) => {
     try {
-      const photo = await Jimp.read(inputURL);
+      //Reference: https://chrisfrew.in/blog/saving-images-in-node-js-using-fetch-with-array-buffer-and-buffer/
+      const response = await fetch(inputURL);
+      const arrayBuffer = await response.arrayBuffer();
+      const photo = await Jimp.read(arrayBuffer);
       const outpath =
         "/tmp/filtered." + Math.floor(Math.random() * 2000) + ".jpg";
       await photo
